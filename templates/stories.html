@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hacker News ++</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='semantic.min.css') }}" rel="stylesheet" media="screen">
+  </head>
+  <body style="background-color: #F6F6EF">
+  <header style="height: 56px;
+      background-color: #E07B53;
+      text-align: center;
+      width: 100%;
+      z-index: 999;
+      position: fixed;
+      top: 0;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      color: #F6F6EF;
+      font-weight: bolder;"><h1><a href="{{ url_for('stories')}}" style="color: #F6F6EF">HACKER NEWS ++</a></h1></header>
+  <div class="ui grid">
+  <div class="one wide column">
+  </div>
+    <div class="fourteen wide column">
+    </br>
+  </br>
+      </br>
+      <h2>STORIES: {{tag.upper()}}</h2>
+      {% for tag_name in tag_names %}
+
+          {% if tag_name == tag %}
+            <a href="{{ url_for('tag', tag_name=tag_name.replace('/', 'q'))}}"><button class="ui small horizontal orange label" style="margin-bottom: 2px; margin-top: 2px;">{{tag_name}}</button></a>
+
+          {% else %} 
+            <a href="{{ url_for('tag', tag_name=tag_name.replace('/', 'q'))}}"><button class="ui small horizontal basic orange label" style="margin-bottom: 2px; margin-top: 2px;">{{tag_name}}</button></a>
+          {% endif %}
+
+        {% endfor %}
+
+
+      <table class="ui striped orange selectable padded collapsing table">
+
+<!--           <thead>
+    <tr><th class="one wide"></th>
+    <th class="one wide"></th>
+    <th class="nine wide"></th>
+    <th class="one wide"></th>
+    <th class="four wide"></th>
+
+  </tr></thead> -->
+
+  <tbody>
+
+{% for story_id in stories_df.index.values %}
+
+    <tr>
+    <td class="one wide"></td>
+      <td class="one wide" style="color: #E07B53; font-size: 14px;">
+{{"{} | {}".format(stories_df.loc[story_id, "score"], stories_df.loc[story_id, "author"])}}
+
+    </td>
+      <td class="nine wide">
+<h3><a href={{stories_df.loc[story_id, 'url']}} style="color: black">{{stories_df.loc[story_id, "title"]}}</a></h3>
+
+      </td>
+      <td class="one wide"><a href="{{ url_for('story', id=story_id)}}" class="fluid ui small button">comments & similar</a></td>
+      
+      <td class="four wide">
+
+        {% for tag_name in tag_names %}
+
+          {% if stories_df.loc[story_id, tag_name] == 1 %}
+            <a href="{{ url_for('tag', tag_name=tag_name.replace('/', 'q'))}}"><button class="ui small horizontal basic orange label" style="margin-bottom: 1px; margin-top: 1px;">{{tag_name}}</button></a>
+          {% endif %}
+        {% endfor %}
+
+      </td>
+
+    </tr>
+
+{% endfor %}
+
+    </tbody>
+</table>
+
+  </div>
+
+</div>
+  </body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hacker News ++</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='semantic.min.css') }}" rel="stylesheet" media="screen">
+  </head>
+  <body style="background-color: #F6F6EF">
+  <header style="height: 56px;
+      background-color: #E07B53;
+      text-align: center;
+      width: 100%;
+      z-index: 999;
+      position: fixed;
+      top: 0;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      color: #F6F6EF;
+            font-weight: bolder;"><h1><a href="{{ url_for('stories')}}" style="color: #F6F6EF">HACKER NEWS ++</a></h1></header>
+  <div class="ui grid">
+  <div class="one wide column">
+  </div>
+    <div class="fourteen wide column">
+    </br>
+  </br>
+      </br>
+      <h2><a href={{story_row['url']}} style="color: black;">{{story_row["title"]}}</a></h2>
+
+        {% for tag_name in tag_names %}
+          {% if story_row[tag_name] == 1 %}
+            <a href="{{ url_for('tag', tag_name=tag_name.replace('/', 'q'))}}"><button class="ui small horizontal orange label" style="margin-bottom: 1px; margin-top: 1px;">{{tag_name}}</button></a>
+          {% endif %}
+        {% endfor %}
+
+</br>
+<h3 class="ui horizontal divider header" style="color: #E07B53;">
+  (IMPERFECT) TL;DR
+</h3>
+<p class="sub header">{{summary}}</p>
+</br>
+<table class="ui very basic celled two column table">
+  <thead>
+    <tr><th style="color: #E07B53; text-align: center;"><h3>SIMILAR HN STORIES</h3></th>
+    <th style="color: #E07B53; text-align: center;"><h3>COMMENTERS OF THIS STORY ALSO COMMENTED ON </h3></th>
+  </tr></thead>
+  <tbody>
+    <tr>
+      <td>
+
+
+          <div class="sub header">
+
+            {% for content_rec in story_row["content_recs"] %}
+          
+            <a href="{{ url_for('story', id=content_rec)}}"><button class="fluid ui small button" style="margin-bottom: 1px; margin-top: 1px;">{{stories_df.loc[content_rec, "title"]}}</button></a>
+
+        {% endfor %}
+
+
+          </div>
+
+   </td>
+      <td>
+        
+        {% for user_rec in story_row["user_recs"] %}
+          
+            <a href="{{ url_for('story', id=user_rec)}}"><button class="fluid ui small button" style="margin-bottom: 1px; margin-top: 1px;">{{stories_df.loc[user_rec, "title"]}}</button></a>
+
+        {% endfor %}
+
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+</br>
+
+
+<h3 class="ui horizontal divider header" style="color: #E07B53;">
+  TOP 5 COMMENTS <a href="{{'https://news.ycombinator.com/item?id={}'.format(story_row['story_id'])}}">[VIEW ALL ON HN]</a>
+</h3>
+
+
+<div class="ui relaxed divided list">
+
+{% for comment in comments_list %}
+  
+  
+<!-- 
+    <div class="ui content sixteen wide column">
+      {{comment[0]}}
+      <div class="text">
+        {{comment[1]}}
+      </div>
+    </div> -->
+  <div class="item">
+    <div class="content">
+      <a class="header">{{comment[0]}}</a>
+      <div class="description">{{comment[1]}}</div>
+    </div>
+  </div>
+
+
+{% endfor %}
+
+</div>
+</div>
+</div>
+
+
+  </body>
+</html>
